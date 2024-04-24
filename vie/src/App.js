@@ -2,8 +2,8 @@ import "./App.css";
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import useInterval from "./useInterval";
 
-const HEIGHT = 25;
-const WIDTH = 35;
+const HEIGHT = 35;
+const WIDTH = 94;
 const positions = [
   [0, 1],
   [0, -1],
@@ -32,6 +32,7 @@ const generateEmptyGrid = () => {
 };
 
 const App = () => {
+  const [step, setStep] = useState(0);
   const [running, setRunning] = useState(false);
   const [grid, setGrid] = useState(() => {
     return generateEmptyGrid();
@@ -53,7 +54,7 @@ const App = () => {
           const newI = i + x;
           const newJ = j + y;
 
-          if (newI >= 0 && newI < HEIGHT && newJ >= 0 && newJ < HEIGHT) {
+          if (newI >= 0 && newI < HEIGHT && newJ >= 0 && newJ < WIDTH) {
             neighbors += grid[newI][newJ];
           }
         });
@@ -67,23 +68,28 @@ const App = () => {
     }
 
     setGrid(gridCopy);
+    setStep(step + 1);
   }, []);
 
   useInterval(() => {
     runSimulation(grid);
-  }, 150);
+  }, 500);
 
   return (
     <div className="container">
-    <div>
-      Jeu de la vie
-    </div>
+    <h1 className="title" >
+      JEU DE LA VIE
+    </h1>
+{/*     <p>
+      Itération : {step}
+    </p> */}
     <div
       style={{
         display: "grid",
         gridTemplateColumns: `repeat(${WIDTH}, 20px)`,
         width: "fit-content",
         margin: "0 auto",
+        backgroundColor:"#4d4d4d"
       }}
     >
       {grid.map((rows, i) =>
@@ -98,13 +104,14 @@ const App = () => {
             style={{
               width: 20,
               height: 20,
-              backgroundColor: grid[i][k] ? "#F68E5F" : undefined,
+              backgroundColor: grid[i][k] ? "#965050e1" : undefined,
               border: "1px solid #595959",
             }}
           ></div>
         ))
       )}
-      <button
+    </div>
+    <button
         onClick={() => {
           setRunning(!running);
           if (!running) {
@@ -133,7 +140,6 @@ const App = () => {
       >
         Aléatoire
       </button>
-    </div>
     </div>
   );
 };
