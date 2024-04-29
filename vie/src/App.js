@@ -67,51 +67,54 @@ const App = () => {
       }
     }
 
+    if (gridCopy == grid) {
+      setRunning(false);
+    }
+
     setGrid(gridCopy);
-    setStep(step + 1);
+
   }, []);
 
   useInterval(() => {
     runSimulation(grid);
+    if (running) {
+      setStep(step + 1);
+    }
   }, 500);
 
   return (
     <div className="container">
-    <h1 className="title" >
-      JEU DE LA VIE
-    </h1>
-{/*     <p>
-      Itération : {step}
-    </p> */}
-    <div
-      style={{
-        display: "grid",
-        gridTemplateColumns: `repeat(${WIDTH}, 20px)`,
-        width: "fit-content",
-        margin: "0 auto",
-        backgroundColor:"#4d4d4d"
-      }}
-    >
-      {grid.map((rows, i) =>
-        rows.map((col, k) => (
-          <div
-            key={`${i}-${k}`}
-            onClick={() => {
-              let newGrid = JSON.parse(JSON.stringify(grid));
-              newGrid[i][k] = grid[i][k] ? 0 : 1;
-              setGrid(newGrid);
-            }}
-            style={{
-              width: 20,
-              height: 20,
-              backgroundColor: grid[i][k] ? "#965050e1" : undefined,
-              border: "1px solid #595959",
-            }}
-          ></div>
-        ))
-      )}
-    </div>
-    <button
+      <h1 className="title">JEU DE LA VIE</h1>
+      <p className="iteration">Itération : {step}</p>
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: `repeat(${WIDTH}, 20px)`,
+          width: "fit-content",
+          margin: "0 auto",
+          backgroundColor: "#4d4d4d",
+        }}
+      >
+        {grid.map((rows, i) =>
+          rows.map((col, k) => (
+            <div
+              key={`${i}-${k}`}
+              onClick={() => {
+                let newGrid = JSON.parse(JSON.stringify(grid));
+                newGrid[i][k] = grid[i][k] ? 0 : 1;
+                setGrid(newGrid);
+              }}
+              style={{
+                width: 20,
+                height: 20,
+                backgroundColor: grid[i][k] ? "#965050e1" : undefined,
+                border: "1px solid #595959",
+              }}
+            ></div>
+          ))
+        )}
+      </div>
+      <button
         onClick={() => {
           setRunning(!running);
           if (!running) {
@@ -126,6 +129,7 @@ const App = () => {
         onClick={() => {
           setGrid(generateEmptyGrid());
           setRunning(false);
+          setStep(0);
         }}
         className="button-27"
       >
